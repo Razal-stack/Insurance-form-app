@@ -20,6 +20,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - 3. InsuranceFormSuccessComponent: Success Page
 - 4. HeaderComponent: Page header for the application
 
+- Lazy Loading is implemented.
 - Unit Test cases are added.
 - All the files are formatted using Prettier Formatter extension from VS Code.
 
