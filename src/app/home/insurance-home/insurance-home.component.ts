@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { fadeInAnimation } from 'src/app/animations/fadeIn';
+import { AppConstants } from 'src/app/app.constants';
 
 @Component({
   selector: 'app-insurance-home',
@@ -9,7 +10,19 @@ import { fadeInAnimation } from 'src/app/animations/fadeIn';
   host: { '[@fadeInAnimation]': '' },
 })
 export class InsuranceHomeComponent implements OnInit {
-  constructor() {}
+  constructor(private constants: AppConstants) {}
 
-  ngOnInit(): void {}
+  public welcomeText: String = '';
+  public welcomeMessage: String = '';
+  public startButtonText: String = '';
+
+  ngOnInit(): void {
+    this.intitializeConstants();
+  }
+
+  intitializeConstants() {
+    this.welcomeText = this.constants.welcomeText;
+    this.welcomeMessage = this.constants.welcomeMessage;
+    this.startButtonText = this.constants.startButtonText;
+  }
 }

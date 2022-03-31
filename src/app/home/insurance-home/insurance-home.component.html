@@ -1,9 +1,11 @@
 <section class="welcome-section">
   <div class="page-container">
     <div class="content-box">
-      <h1 class="page-title">Welcome</h1>
-      <p class="lead-text">Please complete the following questionnaire to know more about the insurance.</p>
-      <button class="begin-btn btn btn-lg mx-auto" routerLink="/insurance">Let's Begin</button>
+      <h1 class="page-title">{{ welcomeText }}</h1>
+      <p class="lead-text">{{ welcomeMessage }}</p>
+      <button class="begin-btn btn btn-lg mx-auto" routerLink="/insurance">
+        {{ startButtonText }}
+      </button>
     </div>
   </div>
 </section>

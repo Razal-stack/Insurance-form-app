@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppConstants } from 'src/app/app.constants';
 
 @Component({
   selector: 'app-header',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  constructor() {}
+  constructor(private constants: AppConstants) {}
 
-  ngOnInit(): void {}
+  public headerText: String = '';
+
+  ngOnInit(): void {
+    this.headerText = this.constants.headerText;
+  }
 }

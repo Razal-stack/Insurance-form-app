@@ -2,7 +2,8 @@
   <div class="page-container">
     <div class="content-box">
       <h5 class="lead-text question-count">
-        Question {{ currentQuestionNumber + 1 }} of {{ questionList.length }}
+        {{ questionText }} {{ currentQuestionNumber + 1 }} of
+        {{ questionList.length }}
       </h5>
 
       <div class="form-wrapper">
@@ -20,7 +21,7 @@
             class="small"
             *ngIf="questionList[currentQuestionNumber]?.multiple === 'true'"
           >
-            Select one or more options.
+            {{ multiSelectText }}
           </p>
           <!-- Multiple answers/Checkbox -->
           <ng-container
@@ -99,7 +100,7 @@
           >
             <textarea
               class="text-input"
-              placeholder="Enter your answer"
+              placeholder="{{ placeHolderText }}"
               cols="30"
               rows="10"
               value="{{ questionList[currentQuestionNumber]?.value }}"
@@ -112,7 +113,7 @@
             ></textarea>
           </ng-container>
           <p class="error-msg small" *ngIf="!isAnswered && interacted">
-            This question is mandatory.
+            {{ mandatoryText }}
           </p>
         </div>
         <nav class="form-nav text-center">
@@ -140,7 +141,7 @@
             *ngIf="currentQuestionNumber === questionList.length - 1"
           >
             <button class="btn submit-btn" routerLink="/insurance/success">
-              Submit
+              {{ submitButtonText }}
             </button>
           </div>
         </nav>

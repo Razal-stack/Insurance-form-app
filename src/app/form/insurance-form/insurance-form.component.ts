@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { fadeInAnimation } from 'src/app/animations/fadeIn';
 import { QuestionService } from 'src/app/service/question.service';
+import { AppConstants } from 'src/app/app.constants';
 
 @Component({
   selector: 'app-insurance-form',
@@ -12,21 +13,30 @@ import { QuestionService } from 'src/app/service/question.service';
 export class InsuranceFormComponent implements OnInit {
   public questionList: any = [];
   public currentQuestionNumber: number = 0;
-  public isQuizCompleted = false;
-  public textInputVal = '';
-  public isAnswered = false;
-  public interacted = false;
+  public isQuizCompleted: boolean = false;
+  public textInputVal: String = '';
+  public questionText: String = '';
+  public multiSelectText: String = '';
+  public mandatoryText: String = '';
+  public submitButtonText: String = '';
+  public placeHolderText: String = '';
+  public isAnswered: boolean = false;
+  public interacted: boolean = false;
   public question_type = {
     choice: 'multiple-choice',
     text: 'text',
   };
   public jumpArray: any = [];
-  constructor(private questionService: QuestionService) {}
+  constructor(
+    private questionService: QuestionService,
+    private constants: AppConstants
+  ) {}
 
   ngOnInit(): void {
     this.getAllQuestions();
+    this.initializeConstants();
   }
-  
+
   getAllQuestions() {
     this.questionList = this.questionService
       .getQuestionJSON()
@@ -35,6 +45,14 @@ export class InsuranceFormComponent implements OnInit {
           this.questionList = response?.questionnaire?.questions;
         }
       });
+  }
+
+  initializeConstants() {
+    this.questionText = this.constants.questionText;
+    this.multiSelectText = this.constants.multiSelectText;
+    this.mandatoryText = this.constants.mandatoryText;
+    this.submitButtonText = this.constants.submitButtonText;
+    this.placeHolderText = this.constants.placeHolderText;
   }
 
   nextQuestion(currentQuestionNumber: number, currentQuestion: any) {
@@ -60,19 +78,22 @@ export class InsuranceFormComponent implements OnInit {
         );
         if (jumpItem) {
           let jumpIdentifier = jumpItem?.destination?.id;
+          // To get the id of the destination question to jump
           const jumpIndex = this.questionList.findIndex(
             (item: any) => item.identifier === jumpIdentifier
           );
-
+          // To check if the destination question to jump is already present in the Jump Array
           let existInJumpList = this.jumpArray.some((jumpEl: any) => {
             return jumpEl.jumpDestinationIndex === jumpIndex;
           });
+          // if the destination question to jump is not added , push it to Jump Array
           if (!existInJumpList) {
             this.jumpArray.push({
               jumpDestinationIndex: jumpIndex,
               jumpInitiatorIndex: currentQuestionNumber,
             });
           }
+          // change the question id to the next destination question
           this.currentQuestionNumber = jumpIndex;
           return;
         }
@@ -81,8 +102,6 @@ export class InsuranceFormComponent implements OnInit {
 
     if (currentQuestionNumber !== this.questionList.length) {
       ++this.currentQuestionNumber;
-    } else {
-      this.isQuizCompleted = true;
     }
     this.interacted = false;
   }
@@ -90,7 +109,7 @@ export class InsuranceFormComponent implements OnInit {
   previousQuestion(currentQuestion: any) {
     this.isAnswered = this.checkMandatory(currentQuestion);
     if (!this.isAnswered && currentQuestion.required) {
-      //is Mandatory Check
+      // is Mandatory Check
       this.interacted = true;
     }
     this.interacted = false;
@@ -107,12 +126,10 @@ export class InsuranceFormComponent implements OnInit {
         });
         if (isAnsweredJump) {
           this.currentQuestionNumber = jumpInitiator.jumpInitiatorIndex;
-          let removeIndex = this.jumpArray.findIndex((element: any) => {
-            return element?.jumpInitiatorIndex === this.currentQuestionNumber;
+          // To remove caller details from the Jump Array, when returned back to caller Question
+          this.jumpArray = this.jumpArray.filter((item: any) => {
+            return item?.jumpInitiatorIndex !== this.currentQuestionNumber;
           });
-          if (removeIndex > -1) {
-            this.jumpArray.splice(removeIndex, 1);
-          }
         }
       } else {
         --this.currentQuestionNumber;
@@ -132,26 +149,30 @@ export class InsuranceFormComponent implements OnInit {
     if (value && currentQuestion) {
       this.isAnswered = true;
       if (questionType == this.question_type.text) {
-        //Type=Text
+        // Storing the user input for the text based question
         this.questionList[questionIndex].value = value;
       } else if (
         questionType === this.question_type.choice &&
         isMultiple === 'false'
       ) {
-        //Type=Radio
+        // Storing the user input for the radio based question
         let options: any = [];
-        let selectedChoice: any = {};
         options = this.questionList[questionIndex].choices;
-        options.forEach((element: any) => {
-          element.selected = false;
+        options = options.map((item: any) => {
+          if (item.value === value) {
+            item.selected = true;
+            return item;
+          } else {
+            item.selected = false;
+            return item;
+          }
         });
-        selectedChoice = options.find((item: any) => item.value === value);
-        selectedChoice.selected = true;
+        this.questionList[questionIndex].choices = options;
       } else if (
         questionType === this.question_type.choice &&
         isMultiple === 'true'
       ) {
-        //Type=Checkbox
+        // Storing the user input for the checkbox based question
         let options: any = [];
         let selectedChoice: any = {};
         options = this.questionList[questionIndex].choices;
@@ -164,7 +185,7 @@ export class InsuranceFormComponent implements OnInit {
     }
 
     if (!value && questionType == this.question_type.text) {
-      //Type=Text
+      // Type = Text
       this.questionList[questionIndex].value = '';
     }
   }
@@ -177,18 +198,17 @@ export class InsuranceFormComponent implements OnInit {
     );
 
     if (questionType == this.question_type.text) {
-      //Type=Text
+      // Type = Text
       this.questionList[questionIndex].value.trim().length === 0
         ? (isAnswered = false)
         : (isAnswered = true);
     } else if (questionType === this.question_type.choice) {
-      //Type=Radio & Checkbox
+      // Type = Radio & Checkbox
       let options: any = [];
       options = this.questionList[questionIndex].choices;
       isAnswered = options.some((item: any) => {
         return item.selected === true;
       });
-      isAnswered ? (isAnswered = true) : (isAnswered = false);
     }
     return isAnswered;
   }

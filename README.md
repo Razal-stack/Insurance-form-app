@@ -14,13 +14,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Technical Aspects
 
-- There are 4 Components and 1 Service present.
+- There are 4 Components, 1 Service and 1 constant file present.
 - 1. InsuranceHomeComponent: Home page of application.
 - 2. InsuranceFormComponent: Question Page
 - 3. InsuranceFormSuccessComponent: Success Page
 - 4. HeaderComponent: Page header for the application
 
 - Unit Test cases are added.
+- All the files are formatted using Prettier Formatter extension from VS Code.
 
 ## Prerequisites
 
