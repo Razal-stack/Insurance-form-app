@@ -1,0 +1,17 @@
+.welcome-section {
+  background: url("src/assets/images/home-bg.svg") no-repeat bottom right / 45vh;
+}
+
+@media screen and (min-width: 768px) {
+  .welcome-section {
+    background-size: 100vh;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .welcome-section {
+    padding-left: 10%;
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,150 @@
+<section class="form-section">
+  <div class="page-container">
+    <div class="content-box">
+      <h5 class="lead-text question-count">
+        Question {{ currentQuestionNumber + 1 }} of {{ questionList.length }}
+      </h5>
+
+      <div class="form-wrapper">
+        <div class="question-area">
+          <h4 class="question">
+            {{ questionList[currentQuestionNumber]?.headline }}
+          </h4>
+          <p
+            class="description"
+            *ngIf="questionList[currentQuestionNumber]?.description"
+          >
+            {{ questionList[currentQuestionNumber]?.description }}
+          </p>
+          <p
+            class="small"
+            *ngIf="questionList[currentQuestionNumber]?.multiple === 'true'"
+          >
+            Select one or more options.
+          </p>
+          <!-- Multiple answers/Checkbox -->
+          <ng-container
+            *ngIf="
+              questionList[currentQuestionNumber]?.question_type ===
+                question_type.choice &&
+              questionList[currentQuestionNumber]?.multiple === 'true'
+            "
+          >
+            <ol class="options">
+              <li
+                *ngFor="
+                  let option of questionList[currentQuestionNumber]?.choices
+                "
+              >
+                <label class="card" [class.selected]="option.selected">
+                  <i class="bi bi-square unchecked"></i>
+                  <i class="bi bi-check-square checked"></i>
+                  <span>{{ option?.label }}</span>
+                  <input
+                    type="checkbox"
+                    class="d-none"
+                    name="{{ questionList[currentQuestionNumber].identifier }}"
+                    value="{{ option?.label }}"
+                    (change)="
+                      answerQuestion(
+                        $event,
+                        questionList[currentQuestionNumber]
+                      )
+                    "
+                  />
+                </label>
+              </li>
+            </ol>
+          </ng-container>
+          <!-- Single Answer/Radio Button -->
+          <ng-container
+            *ngIf="
+              questionList[currentQuestionNumber]?.question_type ===
+                question_type.choice &&
+              questionList[currentQuestionNumber]?.multiple === 'false'
+            "
+          >
+            <ol class="options">
+              <li
+                *ngFor="
+                  let option of questionList[currentQuestionNumber]?.choices
+                "
+              >
+                <label class="card" [class.selected]="option.selected">
+                  <i class="bi bi-circle unchecked"></i>
+                  <i class="bi bi-check-circle checked"></i>
+                  <span>{{ option?.label }}</span>
+                  <input
+                    type="radio"
+                    class="d-none"
+                    name="{{ questionList[currentQuestionNumber].identifier }}"
+                    value="{{ option?.label }}"
+                    (change)="
+                      answerQuestion(
+                        $event,
+                        questionList[currentQuestionNumber]
+                      )
+                    "
+                  />
+                </label>
+              </li>
+            </ol>
+          </ng-container>
+          <!-- Text answer -->
+          <ng-container
+            *ngIf="
+              questionList[currentQuestionNumber]?.question_type ===
+              question_type.text
+            "
+          >
+            <textarea
+              class="text-input"
+              placeholder="Enter your answer"
+              cols="30"
+              rows="10"
+              value="{{ questionList[currentQuestionNumber]?.value }}"
+              (keyup)="
+                answerQuestion($event, questionList[currentQuestionNumber])
+              "
+              (change)="
+                answerQuestion($event, questionList[currentQuestionNumber])
+              "
+            ></textarea>
+          </ng-container>
+          <p class="error-msg small" *ngIf="!isAnswered && interacted">
+            This question is mandatory.
+          </p>
+        </div>
+        <nav class="form-nav text-center">
+          <button
+            [disabled]="currentQuestionNumber === 0"
+            class="btn btn-prev"
+            (click)="previousQuestion(questionList[currentQuestionNumber])"
+          >
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button
+            [disabled]="currentQuestionNumber === questionList.length - 1"
+            class="btn btn-next"
+            (click)="
+              nextQuestion(
+                currentQuestionNumber,
+                questionList[currentQuestionNumber]
+              )
+            "
+          >
+            <i class="bi bi-chevron-right"></i>
+          </button>
+          <div
+            class="text-center submit-btn-div"
+            *ngIf="currentQuestionNumber === questionList.length - 1"
+          >
+            <button class="btn submit-btn" routerLink="/insurance/success">
+              Submit
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>

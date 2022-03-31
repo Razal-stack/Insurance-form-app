@@ -1,0 +1,132 @@
+.form-section {
+  background: url("src/assets/images/form-bg.svg") no-repeat bottom right / 45vh;
+}
+
+.content-box {
+  width: 40rem;
+}
+
+.question-count {
+  color: var(--primary-clr);
+}
+
+.question {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.description {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.small {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--primary-clr);
+  margin: 0;
+  font-weight: 600;
+}
+
+.error-msg {
+  font-style: italic;
+  color: var(--red-clr);
+  margin-bottom: 1rem;
+}
+
+.options {
+  list-style: none;
+  padding: 0.5rem 0 0;
+  margin: 0 0 1rem;
+}
+
+.options .card {
+  display: flex;
+  cursor: pointer;
+  border: 1px solid var(--primary-clr);
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
+  padding: 0.625rem;
+  color: var(--primary-clr);
+  transition: all 0.2s linear;
+}
+
+.options .card:hover {
+  background-color: var(--primary-light-clr);
+}
+
+.options .card.selected {
+  background-color: var(--primary-clr);
+  color: var(--white-clr);
+}
+
+.options .card .bi {
+  margin-right: 0.75rem;
+}
+
+.options .card:not(.selected) .checked,
+.options .card.selected .unchecked {
+  display: none;
+}
+
+.text-input {
+  margin: 1rem 0;
+  display: block;
+  width: 100%;
+  border-radius: 0.25rem;
+  border-color: var(--primary-clr);
+  padding: 0.25rem 0.75rem;
+  min-height: 5rem;
+  background-color: var(--white-clr);
+  outline: none;
+  box-shadow: none;
+  color: var(--primary-clr);
+  font: inherit;
+}
+
+.form-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-wrapper .question-area,
+.form-wrapper .form-nav {
+  width: 100%;
+}
+
+.submit-btn {
+  margin: 1rem;
+  width: calc(100% - 2.5rem);
+}
+
+.btn-prev {
+  margin-right: 0.5rem;
+}
+
+.btn-next {
+  margin-left: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .form-section {
+    background-size: 100vh;
+  }
+
+  .form-wrapper .question-area {
+    width: calc(100% - 9.25rem);
+    padding-right: 0.8rem;
+  }
+
+  .form-wrapper .form-nav {
+    width: 9.25rem;
+    padding-left: 0.8rem;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .form-section {
+    padding-left: 10%;
+    display: flex;
+    padding-top: 10%;
+  }
+}

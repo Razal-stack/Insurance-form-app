@@ -1,0 +1,26 @@
+header {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background-color: transparent;
+  color: var(--primary-clr);
+  background-color: var(--white-clr);
+  padding: 1.5rem 2rem;
+}
+
+.navbar-brand {
+  color: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  font-family: var(--title-font);
+}
+
+@media screen and (min-width: 768px) {
+  header {
+    padding: 1.5rem 1rem;
+  }
+}
