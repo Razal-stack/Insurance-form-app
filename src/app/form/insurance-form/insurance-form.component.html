@@ -136,10 +136,7 @@
           >
             <i class="bi bi-chevron-right"></i>
           </button>
-          <div
-            class="text-center submit-btn-div"
-            *ngIf="currentQuestionNumber === questionList.length - 1"
-          >
+          <div class="text-center submit-btn-div" *ngIf="isLastQuestion">
             <button class="btn submit-btn" routerLink="/insurance/success">
               {{ submitButtonText }}
             </button>

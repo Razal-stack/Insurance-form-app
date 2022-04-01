@@ -1,7 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import {
   ComponentFixture,
+  fakeAsync,
+  inject,
   TestBed,
+  waitForAsync,
 } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -9,6 +12,8 @@ import { InsuranceFormComponent } from './insurance-form.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component } from '@angular/core';
 import { QuestionService } from 'src/app/service/question.service';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 @Component({
   template: '',
 })
@@ -544,13 +549,38 @@ describe('InsuranceFormComponent', () => {
       done();
     });
   });
-  it('should move to next question', async () => {
-    spyOn(component, 'nextQuestion');
+
+  it('should invoke next question', waitForAsync(() => {
+    spyOn(component, 'nextQuestion').and.callThrough();
     let buttonElement =
       fixture.debugElement.nativeElement.querySelector('.btn-next');
-    console.log('buttonElement', buttonElement);
     buttonElement.click();
     fixture.detectChanges();
     expect(component.nextQuestion).toHaveBeenCalled();
+  }));
+
+  it('should invoke previous question', async () => {
+    spyOn(component, 'previousQuestion').and.callThrough();
+    let buttonElement =
+      fixture.debugElement.nativeElement.querySelector('.btn-prev');
+    buttonElement.click();
+    fixture.whenStable().then(() => {
+      expect(component.previousQuestion).toHaveBeenCalled();
+    });
   });
+
+  it('should click submit button to navigate to success page', fakeAsync(
+    inject([Router, Location], (router: Router, location: Location) => {
+      component.isLastQuestion = true;
+      fixture.detectChanges();
+      expect(component.isLastQuestion).toBeTruthy();
+      let buttonElement =
+        fixture.debugElement.nativeElement.querySelector('.submit-btn');
+      buttonElement.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(location.path()).toEqual('/insurance/success');
+      });
+    })
+  ));
 });

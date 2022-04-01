@@ -13,7 +13,7 @@ import { AppConstants } from 'src/app/app.constants';
 export class InsuranceFormComponent implements OnInit {
   public questionList: any = [];
   public currentQuestionNumber: number = 0;
-  public isQuizCompleted: boolean = false;
+  public isLastQuestion: boolean = false;
   public textInputVal: String = '';
   public questionText: String = '';
   public multiSelectText: String = '';
@@ -56,6 +56,12 @@ export class InsuranceFormComponent implements OnInit {
   }
 
   nextQuestion(currentQuestionNumber: number, currentQuestion: any) {
+    if (
+      currentQuestion === null ||
+      currentQuestion === undefined ||
+      Object.keys(currentQuestion).length === 0
+    )
+      return;
     this.isAnswered = this.checkMandatory(currentQuestion);
     if (!this.isAnswered && currentQuestion.required) {
       //is Mandatory Check
@@ -103,10 +109,19 @@ export class InsuranceFormComponent implements OnInit {
     if (currentQuestionNumber !== this.questionList.length) {
       ++this.currentQuestionNumber;
     }
+    if (this.currentQuestionNumber === this.questionList.length - 1) {
+      this.isLastQuestion = true;
+    }
     this.interacted = false;
   }
 
   previousQuestion(currentQuestion: any) {
+    if (
+      currentQuestion === null ||
+      currentQuestion === undefined ||
+      Object.keys(currentQuestion).length === 0
+    )
+      return;
     this.isAnswered = this.checkMandatory(currentQuestion);
     if (!this.isAnswered && currentQuestion.required) {
       // is Mandatory Check
@@ -137,6 +152,7 @@ export class InsuranceFormComponent implements OnInit {
     } else {
       --this.currentQuestionNumber;
     }
+    this.isLastQuestion = false;
   }
 
   answerQuestion(event: any, currentQuestion: any) {
@@ -191,6 +207,12 @@ export class InsuranceFormComponent implements OnInit {
   }
 
   checkMandatory(currentQuestion: any): boolean {
+    if (
+      currentQuestion === null ||
+      currentQuestion === undefined ||
+      Object.keys(currentQuestion).length === 0
+    )
+      return false;
     let isAnswered = false;
     const questionType = currentQuestion.question_type;
     const questionIndex = this.questionList.findIndex(
